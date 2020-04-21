@@ -1,29 +1,24 @@
-new CountdownTimer({
-    selector: '#timer-1',
-    targetDate: new Date('Jul 17, 2019'),
-  });
+const daysRef = document.querySelector('[data-value="days"]');
+const hoursRef = document.querySelector('span[data-value="hours"]');
+const minsRef = document.querySelector('span[data-value="mins"]');
+const secsRef = document.querySelector('span[data-value="secs"]');
 
-  /*
- * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
- * миллисекунд в одном дне (миллисекунды * секунды * минуты * часы)
- */
-const days = Math.floor(time / (1000 * 60 * 60 * 24));
+const parentEl = document.querySelector("#timer-1");
+parentEl.insertAdjacentHTML("afterbegin", '<span class="clockface"></span>');
+const clockface = document.querySelector(".clockface");
 
-/*
- * Оставшиеся часы: получаем остаток от предыдущего расчета с помощью оператора
- * остатка % и делим его на количество миллисекунд в одном часе
- * (1000 * 60 * 60 = миллисекунды * минуты * секунды)
- */
-const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+const intervalId = setInterval(() => {
+  const currentTime = Date.now();
+  const targetDate = new Date("Jul 17, 2020");
+  const deltaTime = targetDate - currentTime;
 
-/*
- * Оставшиеся минуты: получаем оставшиеся минуты и делим их на количество
- * миллисекунд в одной минуте (1000 * 60 = миллисекунды * секунды)
- */
-const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+  daysRef.textContent = pad(Math.floor(deltaTime / (1000 * 60 * 60 * 24)));
+  hoursRef.textContent = pad(Math.floor((deltaTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+  minsRef.textContent = pad(Math.floor((deltaTime % (1000 * 60 * 60)) / (1000 * 60)));
+  secsRef.textContent = pad(Math.floor((deltaTime % (1000 * 60)) / 1000));
+  clockface.textContent = `${daysRef.textContent}:${hoursRef.textContent}:${minsRef.textContent}:${secsRef.textContent}`;
+}, 1000);
 
-/*
- * Оставшиеся секунды: получаем оставшиеся секунды и делим их на количество
- * миллисекунд в одной секунде (1000)
- */
-const secs = Math.floor((time % (1000 * 60)) / 1000);
+function pad(value) {
+  return String(value).padStart(2, "0");
+}

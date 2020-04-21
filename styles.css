@@ -1,0 +1,10 @@
+.clockface {
+  display: block;
+  margin: 50px 0px;
+
+
+}
+#timer-1 {
+  display: block;
+  text-align: center;
+}
